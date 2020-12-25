@@ -8,6 +8,7 @@ const { allowedNodeEnvironmentFlags } = require('process');
 const collection = "todo";
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.json())
 
 
 db.connect((err) => {
