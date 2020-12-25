@@ -4,6 +4,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const db = require('./db');
+const { allowedNodeEnvironmentFlags } = require('process');
 const collection = "todo";
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))
@@ -44,6 +45,7 @@ app.get('/getTodos', (req, res) => {
 app.put('/:id', (req, res) => {
     // Set todoID to the id passed in the request https://expressjs.com/en/4x/api.html#req.params
     const todoID = req.params.id;
+    // req.body is json: { todo : 'clean garage' }
     const userInput = req.body;
 
     // MongoDB findOneAndUpdate: https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
@@ -51,10 +53,37 @@ app.put('/:id', (req, res) => {
         if (err) {
             console.log(err);
         }
-        else{
+        else {
             res.json(result);
         }
     });
 });
 
 // Create todo
+app.post('/', (req, res) => {
+    const userInput = req.body;
+    db.getDB().collection(collection).insertOne(userInput, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            // The result contains information about whether the command was successful or not and the number of records inserted
+            // The result.ops[0] contains information about the inserted data http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#~insertOneWriteOpResult
+            res.json({result : result, document : result.ops[0]});
+        }
+    });
+});
+
+// Delete todo
+app.delete('/:id', (req, res) => {
+    const todoID = req.params.id;
+
+    db.getDB().collection(collection).findOneAndDelete({_id : db.getPrimaryKey(todoID)}, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(result);
+        }
+    })
+})
