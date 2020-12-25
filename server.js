@@ -23,5 +23,38 @@ db.connect((err) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+app.get('/getTodos', (req, res) => {
+    // No parameters in the find() method gives you the same result as SELECT * in MySQL. https://www.w3schools.com/nodejs/nodejs_mongodb_find.asp
+    // MongoDB toArray(callback) returns an array of documents: http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html#toArray
+    db.getDB().collection(collection).find({}).toArray((err, documents) => {
+        if (err) {
+            console.log(err);
+        }
+        else{
+            console.log(documents);
+            res.json(documents);
+        }
+    });
+});
+
+// Edit todo
+app.put('/:id', (req, res) => {
+    // Set todoID to the id passed in the request https://expressjs.com/en/4x/api.html#req.params
+    const todoID = req.params.id;
+    const userInput = req.body;
+
+    // MongoDB findOneAndUpdate: https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
+    db.getDB().collection(collection).findOneAndUpdate({_id : db.getPrimaryKey(todoID)}, {$set : {todo : userInput.todo}}, {returnOriginal : false}, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else{
+            res.json(result);
+        }
+    });
+});
+
+// Create todo
