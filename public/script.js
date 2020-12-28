@@ -1,4 +1,4 @@
-const todoList = document.getElementById('todo-list');
+const todoList = document.getElementById('todoList');
 const userInput = document.getElementById('userInput');
 
 const getTodos = () => {
@@ -6,7 +6,10 @@ const getTodos = () => {
     .then(response => response.json())
     .then(data => {
       data.forEach(todo => {
-          todoList.innerHTML += `<li id="${todo._id}">${todo.todo}<button type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button></li>`
+          todoList.innerHTML += `<li class="todoItem" id="${todo._id}">${todo.todo}
+              <button class="todoButton" type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button>
+              <button class="todoButton" type="button" id="${todo._id}" onclick="editTodo(this.id)">Edit</button>
+          </li>`
       });
     })
     .catch(err => {
@@ -71,7 +74,7 @@ const deleteTodo = (clicked_id) => {
       method: 'DELETE'
     }).then(response => {return response.json()})
       .then((data) => {
-        // If delete from db was successful, delete from html list
+        // If delete from db was successful, delete the <li> item from html list
         if(data.ok == 1){
           var item = document.getElementById(clicked_id)
           item.parentNode.removeChild(item);
@@ -79,8 +82,3 @@ const deleteTodo = (clicked_id) => {
       })
       .catch(err => {console.log(err)})
 }
-
-// function deleteTodo(clicked_id)
-// {
-//     alert(clicked_id);
-// }
