@@ -1,5 +1,11 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
 body {
-    background-color: gray;
+    background-image: linear-gradient(120deg,#824cda,#fb3131);
 }
 
 #container {
@@ -9,8 +15,12 @@ body {
 }
 
 #input {
-    position: absolute;
-    margin: auto;
+    font-size: 20px;
+    width: 25%;
+    background: rgba(255,255,255,0.5);
+    padding: 15px;
+    margin-left: 35px;
+    padding-bottom: 6px;
 }
 
 #todoList {
@@ -19,8 +29,9 @@ body {
 }
 
 .todoButton {
-    background-color: aqua;
+    background-color: lightgray;
     float: right;
+    opacity: 80%;
 }
 
 ul {
@@ -30,8 +41,11 @@ ul {
 }
 
 .todoItem {
-    margin: 20px;
-    background: yellow;
     font-size: 20px;
+    width: 100%;
+    background: rgba(255,255,255,0.5);
+    padding: 18px;
+    margin: 6px 0;
+    overflow: hidden;
 }
   
