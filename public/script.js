@@ -9,8 +9,8 @@ const getTodos = () => {
           todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
           <label id="${todo._id}">${todo.todo}</label>
           <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
-          <button class="todoButton" type="button" id="${todo._id}" onclick="editTodo(this.id)">Edit</button>
-          <button class="todoButton" type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button></td></tr><br>`
+          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)">Delete</button>
+          <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)">Edit</button></td></tr>`
       });
     })
     .catch(err => {
@@ -33,6 +33,7 @@ async function createTodo(url = '/', data = {todo : userInput.value}) {
 
 // Delete todo
 const deleteTodo = (clicked_id) => {
+  clicked_id = clicked_id.split('_')[1]
     console.log(clicked_id)
     fetch(`/${clicked_id}`, {
       method: 'DELETE'
@@ -49,25 +50,30 @@ const deleteTodo = (clicked_id) => {
 
 // Edit todo
 const editTodo = (clicked_id) => {
-  console.log(clicked_id)
+  clicked_id = clicked_id.split('_')[1]
+
   var inputItem = document.getElementById(`input_${clicked_id}`)
   var item = document.getElementById(`${clicked_id}`)
-  console.log(item)
-  //item.setAttribute("class", "editMode")
-  //item.removeAttribute("class", "editMode")
+
   inputItem.classList.toggle("editMode");
   item.classList.toggle("editMode");
 
+  // Change Edit button to apply when in edit mode
+  var editBtn = document.getElementById(`editBtn_${clicked_id}`)
+  if (editBtn.innerHTML === "Edit") {
+    editBtn.innerHTML = "Apply";
+  } else {
+    editBtn.innerHTML = "Edit";
+    var inputItemText = document.getElementById(`input_${clicked_id}`).value
+    item.innerHTML = inputItemText
+  }
 
-
-  // fetch(`/${clicked_id}`, {
-  //   method: 'PUT'
-  // }).then(response => {return response.json()})
-  //   .then((data) => {
-  //     if(data.ok == 1){
-  //       var item = document.getElementById(clicked_id)
-  //       item.parentNode.removeChild(item);
-  //     }
-  //   })
-  //   .catch(err => {console.log(err)})
+  fetch(`/${clicked_id}`, {
+    method: 'PUT',
+    headers : {
+      "Content-Type" : "application/json; charset=utf-8" 
+  },
+  body : JSON.stringify({todo : inputItemText})
+  }).then(response => {return response.json()})
+    .catch(err => {console.log(err)})
 }
