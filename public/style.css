@@ -9,9 +9,11 @@ body {
 }
 
 #container {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: 20px; */
+    width: 50%;
+    margin: 0 auto;
 }
 
 #input {
@@ -40,12 +42,14 @@ ul {
     list-style-type: none;
 }
 
-.todoItem {
+td label {
     font-size: 20px;
     width: 100%;
     background: rgba(255,255,255,0.5);
-    padding: 18px;
-    margin: 6px 0;
+    padding: 10px;
     overflow: hidden;
 }
-  
+
+.editMode {
+    display: none;
+}

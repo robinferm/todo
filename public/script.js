@@ -6,10 +6,11 @@ const getTodos = () => {
     .then(response => response.json())
     .then(data => {
       data.forEach(todo => {
-          todoList.innerHTML += `<li class="todoItem" id="${todo._id}">${todo.todo}
-              <button class="todoButton" type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button>
-              <button class="todoButton" type="button" id="${todo._id}" onclick="editTodo(this.id)">Edit</button>
-          </li>`
+          todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
+          <label id="${todo._id}">${todo.todo}</label>
+          <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
+          <button class="todoButton" type="button" id="${todo._id}" onclick="editTodo(this.id)">Edit</button>
+          <button class="todoButton" type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button></td></tr><br>`
       });
     })
     .catch(err => {
@@ -39,9 +40,34 @@ const deleteTodo = (clicked_id) => {
       .then((data) => {
         // If delete from db was successful, delete the <li> item from html list
         if(data.ok == 1){
-          var item = document.getElementById(clicked_id)
+          var item = document.getElementById(`tr_${clicked_id}`)
           item.parentNode.removeChild(item);
         }
       })
       .catch(err => {console.log(err)})
+}
+
+// Edit todo
+const editTodo = (clicked_id) => {
+  console.log(clicked_id)
+  var inputItem = document.getElementById(`input_${clicked_id}`)
+  var item = document.getElementById(`${clicked_id}`)
+  console.log(item)
+  //item.setAttribute("class", "editMode")
+  //item.removeAttribute("class", "editMode")
+  inputItem.classList.toggle("editMode");
+  item.classList.toggle("editMode");
+
+
+
+  // fetch(`/${clicked_id}`, {
+  //   method: 'PUT'
+  // }).then(response => {return response.json()})
+  //   .then((data) => {
+  //     if(data.ok == 1){
+  //       var item = document.getElementById(clicked_id)
+  //       item.parentNode.removeChild(item);
+  //     }
+  //   })
+  //   .catch(err => {console.log(err)})
 }
