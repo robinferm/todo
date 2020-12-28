@@ -63,12 +63,20 @@ async function createTodo(url = '/', data = {todo : userInput.value}) {
 // })
 
 
+
+// Delete todo
 const deleteTodo = (clicked_id) => {
     console.log(clicked_id)
     fetch(`/${clicked_id}`, {
       method: 'DELETE'
-    }).then(response => {response.json()})
-      //.then(`${todo._id}`.remove())
+    }).then(response => {return response.json()})
+      .then((data) => {
+        // If delete from db was successful, delete from html list
+        if(data.ok == 1){
+          var item = document.getElementById(clicked_id)
+          item.parentNode.removeChild(item);
+        }
+      })
       .catch(err => {console.log(err)})
 }
 
