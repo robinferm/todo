@@ -4,7 +4,6 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const db = require('./db');
-const { allowedNodeEnvironmentFlags } = require('process');
 const collection = "todo";
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))

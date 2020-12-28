@@ -6,7 +6,7 @@ const getTodos = () => {
     .then(response => response.json())
     .then(data => {
       data.forEach(todo => {
-          todoList.innerHTML += `<li id="${todo._id}">${todo.todo}</li>` 
+          todoList.innerHTML += `<li id="${todo._id}">${todo.todo}<button type="button" id="${todo._id}" onclick="deleteTodo(this.id)">Delete</button></li>`
       });
     })
     .catch(err => {
@@ -14,27 +14,6 @@ const getTodos = () => {
     })
 }
 getTodos();
-
-// async function createTodo() {
-//     var userInput = document.getElementById('userInput');
-//     await fetch('/', {
-//         method: 'post',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ todo : userInput.value})
-//         //body: JSON.stringify({ "todo" : "test"})
-//       })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log('Success', data)
-//         //getTodos();
-//     })
-//     .catch(err => {
-//         console.log('Error', err)
-//     })
-// }
-console.log(userInput)
-console.log(userInput.value)
-
 
 // Example POST method implementation:
 async function createTodo(url = '/', data = {todo : userInput.value}) {
@@ -51,8 +30,9 @@ async function createTodo(url = '/', data = {todo : userInput.value}) {
       //redirect: 'follow', // manual, *follow, error
       //referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
       body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
+    }).then(response => {response.json()})
+      .catch(err => {console.log(err)})
+   // return response.json(); // parses JSON response into native JavaScript objects
   }
   
 //   createTodo()
@@ -63,14 +43,36 @@ async function createTodo(url = '/', data = {todo : userInput.value}) {
 
 
 
+// Delete todo
+// async function deleteTodo(todo) {
+//   console.log('click1')
+//   button = getElementById('delete_5fe9ed217ffa305ff4037771')
+//   alert(button)
+//     const response = await fetch(`/${todo._id}`, {
+//       method: 'DELETE'
+//     }).then(response => {response.json()})
+//       //.then(`${todo._id}`.remove())
+//       .catch(err => {console.log(err)})
+// }
+
+// deleteTodo()
 
 
+// document.getElementsByTagName("button").addEventListener("click", function() {
+// alert(todo._id)
+// })
 
 
-
-
-//createTodo();
-
-const resetTodosInput = ()=>{
-    userInput.value = "";
+const deleteTodo = (clicked_id) => {
+    console.log(clicked_id)
+    fetch(`/${clicked_id}`, {
+      method: 'DELETE'
+    }).then(response => {response.json()})
+      //.then(`${todo._id}`.remove())
+      .catch(err => {console.log(err)})
 }
+
+// function deleteTodo(clicked_id)
+// {
+//     alert(clicked_id);
+// }
