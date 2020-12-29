@@ -9,20 +9,16 @@ body {
 
 form {
     background: rgba(255,255,255,0.5);
-    width: 99%;
+    width: 100%;
     margin: auto;
     margin-bottom: 15px;
 }
 
-#userInput {
+input {
     background: none;
     font-size: 25px;
-    width: 100%;
+    width: 65%;
     border: none;
-}
-
-#todoList {
-
 }
 
 .todoButton {
@@ -32,6 +28,9 @@ form {
     margin: 4px;
 }
 
+table {
+    border-spacing:0 15px;
+}
 
 tr td {
     background: rgba(255,255,255,0.5);
@@ -45,6 +44,7 @@ label {
     max-width: 400px;
     padding-left: 10px;
     width: 400px;
+    margin-top: 6px;
 }
 
 .editMode {
@@ -52,7 +52,10 @@ label {
 }
 
 
-
+.todoButton:hover{
+    transform: scale(1.1);
+    transition: all ease 400ms;
+  }
 
 
 

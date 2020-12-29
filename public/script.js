@@ -58,6 +58,10 @@ const editTodo = (clicked_id) => {
   inputItem.classList.toggle("editMode");
   item.classList.toggle("editMode");
 
+  // Select currect text when clicking edit
+  inputItem.select();
+
+
   // Change Edit button to apply when in edit mode
   var editBtn = document.getElementById(`editBtn_${clicked_id}`)
   if (editBtn.innerHTML === "Edit") {
