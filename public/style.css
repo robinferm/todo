@@ -33,12 +33,21 @@ input:focus {
     border: none;
 }
 
+.completeButton {
+    float: left;
+}
+
 table {
     border-spacing:0 15px;
 }
 
 tr td {
     background: rgba(255,255,255,0.5);
+}
+
+ol li {
+    background: rgba(255,255,255,0.5);
+    display: block;
 }
 
 label {
@@ -61,3 +70,7 @@ label {
     transform: scale(1.1);
     transition: all ease 400ms;
   }
+
+.completeTodo {
+    text-decoration: line-through;
+}

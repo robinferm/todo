@@ -1,4 +1,5 @@
 const todoList = document.getElementById('todoList');
+const todoListComplete = document.getElementById('todoListComplete');
 const userInput = document.getElementById('userInput');
 
 const getTodos = () => {
@@ -6,12 +7,33 @@ const getTodos = () => {
     .then(response => response.json())
     .then(data => {
       data.forEach(todo => {
+        // Set all new todos first and all completed todos last
+        if(todo.status === "new") {
         todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
+          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
           <label id="${todo._id}">${todo.todo}</label>
           <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
           <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
           <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
+        }
+        else {
+          todoListComplete.innerHTML += `<tr id="tr_${todo._id}"><td>
+          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
+          <label class="completeTodo" id="${todo._id}">${todo.todo}</label>
+          <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
+          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
+          <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
+        }
       });
+    // .then(data => {
+    //   data.forEach(todo => {
+    //     todoList.innerHTML += `<ol><li id="tr_${todo._id}">
+    //       <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
+    //       <label id="${todo._id}">${todo.todo}</label>
+    //       <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
+    //       <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
+    //       <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></li>`
+    //   });
     })
     .catch(err => {
       console.log(err)
@@ -20,7 +42,7 @@ const getTodos = () => {
 getTodos();
 
 // Create todo
-async function createTodo(url = '/', data = { todo: userInput.value }) {
+async function createTodo(url = '/', data = { todo: userInput.value, status : "new"}) {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -95,4 +117,28 @@ const editTodo = (clicked_id) => {
     body: JSON.stringify({ todo: inputItemText })
   }).then(response => { return response.json() })
     .catch(err => { console.log(err) })
+}
+
+const completeTodo = (clicked_id) => {
+  clicked_id = clicked_id.split('_')[1]
+  var checkboxIcon = document.getElementById(`checkbox_${clicked_id}`)
+  var item = document.getElementById(`${clicked_id}`)
+  console.log(item)
+  checkboxIcon.classList.toggle("fa-square")
+  checkboxIcon.classList.toggle("fa-check-square")
+
+  item.classList.toggle("completeTodo")
+
+    
+  // Change to completed status in db
+  fetch(`/complete/${clicked_id}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({status: "completed" })
+  }).then(response => { return response.json() })
+    .catch(err => { console.log(err) })
+
+    // reverse when uncheck??
 }

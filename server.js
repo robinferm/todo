@@ -59,6 +59,24 @@ app.put('/:id', (req, res) => {
     });
 });
 
+// Complete todo
+app.put('/complete/:id', (req, res) => {
+    // Set todoID to the id passed in the request https://expressjs.com/en/4x/api.html#req.params
+    const todoID = req.params.id;
+    // req.body is json: { todo : 'clean garage' }
+    const userInput = req.body;
+
+    // MongoDB findOneAndUpdate: https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
+    db.getDB().collection(collection).findOneAndUpdate({_id : db.getPrimaryKey(todoID)}, {$set : {status : userInput.status}}, {returnOriginal : false}, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(result);
+        }
+    });
+});
+
 // Create todo
 app.post('/', (req, res) => {
     const userInput = req.body;
