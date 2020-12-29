@@ -18,7 +18,7 @@ const getTodos = () => {
         }
         else {
           todoListComplete.innerHTML += `<tr id="tr_${todo._id}"><td>
-          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
+          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-check-square"></i></button>
           <label class="completeTodo" id="${todo._id}">${todo.todo}</label>
           <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
           <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
@@ -119,6 +119,7 @@ const editTodo = (clicked_id) => {
     .catch(err => { console.log(err) })
 }
 
+// Mark todo as complete
 const completeTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
   var checkboxIcon = document.getElementById(`checkbox_${clicked_id}`)
@@ -129,16 +130,18 @@ const completeTodo = (clicked_id) => {
 
   item.classList.toggle("completeTodo")
 
-    
-  // Change to completed status in db
-  fetch(`/complete/${clicked_id}`, {
-    method: 'PUT',
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify({status: "completed" })
-  }).then(response => { return response.json() })
-    .catch(err => { console.log(err) })
 
-    // reverse when uncheck??
+// Move completed task to bottom
+var tr = document.getElementById(`tr_${clicked_id}`)
+todoListComplete.append(tr)
+    
+//Change to completed status in db
+fetch(`/complete/${clicked_id}`, {
+  method: 'PUT',
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  body: JSON.stringify({status: "completed" })
+}).then(response => { return response.json() })
+  .catch(err => { console.log(err) })
 }
