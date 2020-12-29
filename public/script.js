@@ -9,7 +9,7 @@ const getTodos = () => {
         todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
           <label id="${todo._id}">${todo.todo}</label>
           <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
-          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)">Delete</button>
+          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
           <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
       });
     })
