@@ -8,8 +8,8 @@ const getTodos = () => {
     .then(data => {
       data.forEach(todo => {
         // Set all new todos first and all completed todos last
-        if(todo.status === "new") {
-        todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
+        if (todo.status === "new") {
+          todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
           <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
           <label id="${todo._id}">${todo.todo}</label>
           <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
@@ -25,15 +25,6 @@ const getTodos = () => {
           <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
         }
       });
-    // .then(data => {
-    //   data.forEach(todo => {
-    //     todoList.innerHTML += `<ol><li id="tr_${todo._id}">
-    //       <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
-    //       <label id="${todo._id}">${todo.todo}</label>
-    //       <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
-    //       <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
-    //       <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></li>`
-    //   });
     })
     .catch(err => {
       console.log(err)
@@ -41,8 +32,9 @@ const getTodos = () => {
 }
 getTodos();
 
+
 // Create todo
-async function createTodo(url = '/', data = { todo: userInput.value, status : "new"}) {
+async function createTodo(url = '/', data = { todo: userInput.value, status: "new" }) {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -70,6 +62,7 @@ const deleteTodo = (clicked_id) => {
     .catch(err => { console.log(err) })
 }
 
+
 // Edit todo
 const editTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
@@ -82,17 +75,6 @@ const editTodo = (clicked_id) => {
 
   // Select currect text when clicking edit
   inputItem.select();
-
-
-  // Change Edit button to apply when in edit mode
-  // var editBtn = document.getElementById(`editBtn_${clicked_id}`)
-  // if (editBtn.innerHTML === "Edit") {
-  //   editBtn.innerHTML = "Apply";
-  // } else {
-  //   editBtn.innerHTML = "Edit";
-  //   var inputItemText = document.getElementById(`input_${clicked_id}`).value
-  //   item.innerHTML = inputItemText
-  // }
 
   //  Change Edit button icon to checkmark when in edit mode and change back when applying changes
   var icon = document.getElementById(`icon_${clicked_id}`)
@@ -119,29 +101,31 @@ const editTodo = (clicked_id) => {
     .catch(err => { console.log(err) })
 }
 
+
 // Mark todo as complete
 const completeTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
   var checkboxIcon = document.getElementById(`checkbox_${clicked_id}`)
   var item = document.getElementById(`${clicked_id}`)
-  console.log(item)
+
+  // Set checkmark in box when marking todo as complete
   checkboxIcon.classList.toggle("fa-square")
   checkboxIcon.classList.toggle("fa-check-square")
-
+  // Strike through on complete
   item.classList.toggle("completeTodo")
 
 
-// Move completed task to bottom
-var tr = document.getElementById(`tr_${clicked_id}`)
-todoListComplete.append(tr)
-    
-//Change to completed status in db
-fetch(`/complete/${clicked_id}`, {
-  method: 'PUT',
-  headers: {
-    "Content-Type": "application/json; charset=utf-8"
-  },
-  body: JSON.stringify({status: "completed" })
-}).then(response => { return response.json() })
-  .catch(err => { console.log(err) })
+  // Move completed task to bottom
+  var tr = document.getElementById(`tr_${clicked_id}`)
+  todoListComplete.append(tr)
+
+  //Change to completed status in db
+  fetch(`/complete/${clicked_id}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({ status: "completed" })
+  }).then(response => { return response.json() })
+    .catch(err => { console.log(err) })
 }
