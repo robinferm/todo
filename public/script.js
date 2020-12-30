@@ -6,25 +6,7 @@ const getTodos = () => {
   fetch('/getTodos')
     .then(response => response.json())
     .then(data => {
-      data.forEach(todo => {
-        // Set all new todos first and all completed todos last
-        if (todo.status === "new") {
-          todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
-          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
-          <label id="${todo._id}">${todo.todo}</label>
-          <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
-          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
-          <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
-        }
-        else {
-          todoListComplete.innerHTML += `<tr id="tr_${todo._id}"><td>
-          <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-check-square"></i></button>
-          <label class="completeTodo" id="${todo._id}">${todo.todo}</label>
-          <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
-          <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
-          <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
-        }
-      });
+      displayTodos(data);
     })
     .catch(err => {
       console.log(err)
@@ -32,17 +14,27 @@ const getTodos = () => {
 }
 getTodos();
 
-
-// Create todo
-async function createTodo(url = '/', data = { todo: userInput.value, status: "new" }) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  }).then(response => { response.json() })
-    .catch(err => { console.log(err) })
+const displayTodos = (data) => {
+  //if(typeof(data) === "string"){data = JSON.parse(data)}
+  data.forEach(todo => {
+    // Set all new todos first and all completed todos last
+    if (todo.status === "new") {
+      todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
+    <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
+    <label id="${todo._id}">${todo.todo}</label>
+    <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
+    <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
+    <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
+    }
+    else {
+      todoListComplete.innerHTML += `<tr id="tr_${todo._id}"><td>
+    <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-check-square"></i></button>
+    <label class="completeTodo" id="${todo._id}">${todo.todo}</label>
+    <input class="editMode" id="input_${todo._id}" type="text" value="${todo.todo}">
+    <button class="todoButton" type="button" id="deleteBtn_${todo._id}" onclick="deleteTodo(this.id)"><i class="far fa-trash-alt"></i></button>
+    <button class="todoButton" type="button" id="editBtn_${todo._id}" onclick="editTodo(this.id)"><i id="icon_${todo._id}" class="far fa-edit"></i></button></td></tr>`
+    }
+  });
 }
 
 // Delete todo
@@ -129,3 +121,24 @@ const completeTodo = (clicked_id) => {
   }).then(response => { return response.json() })
     .catch(err => { console.log(err) })
 }
+
+// Create todo
+document.querySelector("form").addEventListener("submit", function (e) {
+  e.preventDefault();    //stop form from submitting
+
+  fetch('/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ todo: userInput.value, status: "new" })
+  }).then(response => {return response.json() })
+    .then(data => {
+      var arr = []
+      arr.push(data.document)
+      console.log(arr)
+      displayTodos(arr)
+      userInput.value = "";
+    })
+    .catch(err => { console.log(err) })
+});
