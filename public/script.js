@@ -106,10 +106,23 @@ const completeTodo = (clicked_id) => {
   // Strike through on complete
   item.classList.toggle("completeTodo")
 
-
+  // Create status to pass in to PUT request body
+  var todoStatus = "";
+  if (item.classList.contains("completeTodo")) {
+    todoStatus = "completed"
+  }
+  else {
+    todoStatus = "new"
+  }
+  
   // Move completed task to bottom
   var tr = document.getElementById(`tr_${clicked_id}`)
-  todoListComplete.append(tr)
+  if (todoStatus === "completed") {
+    todoListComplete.append(tr)
+  }
+  else {
+    todoList.append(tr)
+  }
 
   //Change to completed status in db
   fetch(`/complete/${clicked_id}`, {
@@ -117,7 +130,7 @@ const completeTodo = (clicked_id) => {
     headers: {
       "Content-Type": "application/json; charset=utf-8"
     },
-    body: JSON.stringify({ status: "completed" })
+    body: JSON.stringify({ status: todoStatus })
   }).then(response => { return response.json() })
     .catch(err => { console.log(err) })
 }
@@ -132,7 +145,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ todo: userInput.value, status: "new" })
-  }).then(response => {return response.json() })
+  }).then(response => { return response.json() })
     .then(data => {
       var arr = []
       arr.push(data.document)
