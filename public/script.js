@@ -15,7 +15,6 @@ const getTodos = () => {
 getTodos();
 
 const displayTodos = (data) => {
-  //if(typeof(data) === "string"){data = JSON.parse(data)}
   data.forEach(todo => {
     // Set all new todos first and all completed todos last
     if (todo.status === "new") {
@@ -114,7 +113,7 @@ const completeTodo = (clicked_id) => {
   else {
     todoStatus = "new"
   }
-  
+
   // Move completed task to bottom
   var tr = document.getElementById(`tr_${clicked_id}`)
   if (todoStatus === "completed") {

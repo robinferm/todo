@@ -74,3 +74,13 @@ label {
 .completeTodo {
     text-decoration: line-through;
 }
+
+@keyframes test {
+    from {background-color: red;}
+    to {background-color: yellow;}
+  }
+
+.test {
+    animation-name: test;
+    animation-duration: 4s;
+}
