@@ -25,6 +25,14 @@ input:focus {
     outline: none;
 }
 
+#userInput {
+    opacity: 50%;
+}
+
+#userInput:focus {
+    opacity: 100%;
+}
+
 .todoButton {
     background-color: transparent;
     float: right;
