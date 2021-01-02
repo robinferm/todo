@@ -1,7 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const dbname = "crud_mongodb";
-const url = "mongodb://localhost:27017";
+//const url = "mongodb://localhost:27017";
+const secrets = require('./secrets')
+const url = secrets.DB_URL
 const mongoOptions = {useUnifiedTopology : true};
 
 // Object with a db property that will be set to a db instance
