@@ -1,6 +1,6 @@
 body {
     background-image: linear-gradient(105deg,#824cda,#fb3131);
-    margin-top: 50px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,17 +8,19 @@ body {
 }
 
 form {
-    background: rgba(255,255,255,0.5);
     width: 100%;
     margin: auto;
     margin-bottom: 15px;
+    height: 35px;
 }
 
 input {
     background: none;
     font-size: 25px;
     width: 65%;
-    border: none;
+    border:none;
+    margin-top: 3px;
+    margin-left: 3px;
 }
 
 input:focus {
@@ -27,6 +29,9 @@ input:focus {
 
 #userInput {
     opacity: 50%;
+    margin-top: 3px;
+    margin-left: 3px;
+    border-bottom: 3px solid black;
 }
 
 #userInput:focus {
@@ -52,6 +57,7 @@ table {
 
 tr td {
     background: rgba(255,255,255,0.5);
+    box-shadow: 0 0 5px #000000;
 }
 
 label {
@@ -77,3 +83,14 @@ label {
 .completeTodo {
     text-decoration: line-through;
 }
+
+/* img {
+    box-shadow: 0 0 25px #000000;
+    background: transparent;
+} */
+
+img {
+    width: 250px;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+  }
