@@ -95,7 +95,6 @@ app.post('/', (req, res) => {
 // Delete todo
 app.delete('/:id', (req, res) => {
     const todoID = req.params.id;
-
     db.getDB().collection(collection).findOneAndDelete({_id : db.getPrimaryKey(todoID)}, (err, result) => {
         if (err) {
             console.log(err);

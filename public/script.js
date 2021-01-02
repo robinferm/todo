@@ -2,6 +2,7 @@ const todoList = document.getElementById('todoList');
 const todoListComplete = document.getElementById('todoListComplete');
 const userInput = document.getElementById('userInput');
 
+
 const getTodos = () => {
   fetch('/getTodos')
     .then(response => response.json())
@@ -14,9 +15,10 @@ const getTodos = () => {
 }
 getTodos();
 
+
 const displayTodos = (data) => {
   data.forEach(todo => {
-    // Set all new todos first and all completed todos last
+    // Set all new todos in the first table and all completed todos in the second table
     if (todo.status === "new") {
       todoList.innerHTML += `<tr id="tr_${todo._id}"><td>
     <button class="todoButton completeButton" type="button" id="completeBtn_${todo._id}" onclick="completeTodo(this.id)"><i id="checkbox_${todo._id}" class="far fa-square"></i></button>
@@ -36,15 +38,14 @@ const displayTodos = (data) => {
   });
 }
 
-// Delete todo
+
 const deleteTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
-  console.log(clicked_id)
   fetch(`/${clicked_id}`, {
     method: 'DELETE'
   }).then(response => { return response.json() })
     .then((data) => {
-      // If delete from db was successful, delete the <li> item from html list
+      // If delete from db was successful, delete the <tr> item from html list
       if (data.ok == 1) {
         var item = document.getElementById(`tr_${clicked_id}`)
         item.parentNode.removeChild(item);
@@ -54,22 +55,21 @@ const deleteTodo = (clicked_id) => {
 }
 
 
-// Edit todo
 const editTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
 
   var inputItem = document.getElementById(`input_${clicked_id}`)
   var item = document.getElementById(`${clicked_id}`)
 
+  // Toggle 'display: none' on label and input
   inputItem.classList.toggle("editMode");
   item.classList.toggle("editMode");
 
-  // Select currect text when clicking edit
+  // Select current text when clicking edit
   inputItem.select();
 
-  //  Change Edit button icon to checkmark when in edit mode and change back when applying changes
+  // Change Edit button icon to checkmark when in edit mode and change back when applying changes
   var icon = document.getElementById(`icon_${clicked_id}`)
-
   icon.classList.toggle("far")
   icon.classList.toggle("fa-edit")
   icon.classList.toggle("fas")
@@ -93,7 +93,6 @@ const editTodo = (clicked_id) => {
 }
 
 
-// Mark todo as complete
 const completeTodo = (clicked_id) => {
   clicked_id = clicked_id.split('_')[1]
   var checkboxIcon = document.getElementById(`checkbox_${clicked_id}`)
@@ -105,7 +104,7 @@ const completeTodo = (clicked_id) => {
   // Strike through on complete
   item.classList.toggle("completeTodo")
 
-  // Create status to pass in to PUT request body
+  // Create a todo-status to pass in the PUT request body
   var todoStatus = "";
   if (item.classList.contains("completeTodo")) {
     todoStatus = "completed"
@@ -134,6 +133,7 @@ const completeTodo = (clicked_id) => {
     .catch(err => { console.log(err) })
 }
 
+
 // Create todo
 document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault();    //stop form from submitting
@@ -148,7 +148,6 @@ document.querySelector("form").addEventListener("submit", function (e) {
     .then(data => {
       var arr = []
       arr.push(data.document)
-      console.log(arr)
       displayTodos(arr)
       userInput.value = "";
     })

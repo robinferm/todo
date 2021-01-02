@@ -54,11 +54,6 @@ tr td {
     background: rgba(255,255,255,0.5);
 }
 
-ol li {
-    background: rgba(255,255,255,0.5);
-    display: block;
-}
-
 label {
     overflow: hidden;
     text-overflow: ellipsis; 
@@ -81,14 +76,4 @@ label {
 
 .completeTodo {
     text-decoration: line-through;
-}
-
-@keyframes test {
-    from {background-color: red;}
-    to {background-color: yellow;}
-  }
-
-.test {
-    animation-name: test;
-    animation-duration: 4s;
 }
